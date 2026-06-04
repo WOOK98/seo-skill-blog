@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我开源了一个 Claude SEO Skill——729行文档，覆盖 2026 全栈 SEO 的所有阶段</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d0d0d;
+    --ink-soft: #3a3a3a;
+    --ink-muted: #888;
+    --paper: #f7f4ef;
+    --paper-warm: #ede9e2;
+    --accent: #c8401a;
+    --accent-light: #f5e8e3;
+    --accent-pale: #faf3f0;
+    --green: #1a6b45;
+    --green-light: #e3f0ea;
+    --rule: rgba(13,13,13,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    border-bottom: 1px solid var(--rule);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    z-index: 100;
+    backdrop-filter: blur(4px);
+  }
+  .header-inner {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .site-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+  .site-logo span { color: var(--accent); }
+  .header-nav {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+  .header-nav a {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .header-nav a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 80px 24px 56px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .category-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 900;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 24px;
+    max-width: 660px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-sub {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--ink-soft);
+    max-width: 580px;
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-family: 'DM Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .meta-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--ink-muted);
+    display: inline-block;
+  }
+
+  /* ── STAT STRIP ── */
+  .stat-strip {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 36px 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .stat-item {
+    padding: 0 28px 0 0;
+    border-right: 1px solid var(--rule);
+  }
+  .stat-item:last-child { border-right: none; padding-right: 0; padding-left: 28px; }
+  .stat-item:nth-child(2) { padding: 0 28px; }
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-weight: 400;
+  }
+
+  /* ── BODY ── */
+  .article-body {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* intro */
+  .intro-block {
+    padding: 56px 0 48px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .intro-block p { margin-bottom: 20px; color: var(--ink-soft); }
+  .intro-block p:last-child { margin-bottom: 0; }
+  .callout-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--ink);
+    border-left: 3px solid var(--accent);
+    padding-left: 24px;
+    margin: 32px 0;
+  }
+
+  /* sections */
+  .section {
+    padding: 56px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section:last-child { border-bottom: none; }
+
+  .section-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: var(--ink);
+  }
+  .section p { color: var(--ink-soft); margin-bottom: 16px; }
+  .section p:last-child { margin-bottom: 0; }
+
+  /* tag chips */
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px 0;
+  }
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+  .tag-green { background: var(--green-light); color: var(--green); }
+  .tag-red { background: var(--accent-light); color: var(--accent); }
+  .tag-gray { background: var(--paper-warm); color: var(--ink-soft); }
+
+  /* checklist */
+  .checklist {
+    list-style: none;
+    margin: 20px 0;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink-soft);
+    font-size: 16px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-icon {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--green-light);
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-weight: 700;
+  }
+
+  /* phases grid */
+  .phases-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 28px 0;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .phase-card {
+    background: var(--paper);
+    padding: 24px;
+    transition: background 0.2s;
+  }
+  .phase-card:hover { background: var(--accent-pale); }
+  .phase-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .phase-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .phase-desc {
+    font-size: 14px;
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+
+  /* highlight box */
+  .highlight-box {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 32px;
+    margin: 32px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .highlight-box::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 160px;
+    color: rgba(255,255,255,0.05);
+    position: absolute;
+    top: -20px;
+    left: 16px;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .highlight-box .stat-big {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .highlight-box p {
+    font-size: 15px;
+    color: rgba(247,244,239,0.75);
+    margin: 0;
+    max-width: 480px;
+  }
+  .highlight-box strong { color: var(--paper); }
+
+  /* code block */
+  .code-block {
+    background: var(--paper-warm);
+    border-left: 3px solid var(--accent);
+    padding: 20px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+
+  /* install steps */
+  .install-steps {
+    counter-reset: steps;
+    list-style: none;
+    margin: 20px 0;
+  }
+  .install-steps li {
+    counter-increment: steps;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .install-steps li:last-child { border-bottom: none; }
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 28px;
+    line-height: 1.3;
+  }
+  .step-text { color: var(--ink-soft); }
+  .step-text strong { color: var(--ink); font-weight: 500; }
+
+  /* CTA */
+  .cta-section {
+    padding: 64px 0 80px;
+    text-align: center;
+  }
+  .cta-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 16px;
+    color: var(--ink);
+  }
+  .cta-section p {
+    color: var(--ink-muted);
+    margin-bottom: 32px;
+    font-size: 16px;
+  }
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--rule);
+  }
+  .btn-secondary:hover { border-color: var(--ink); background: var(--paper-warm); }
+
+  /* footer */
+  .site-footer {
+    border-top: 1px solid var(--rule);
+    padding: 32px 24px;
+    max-width: 780px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-copy {
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-links {
+    display: flex;
+    gap: 20px;
+  }
+  .footer-links a {
+    font-size: 13px;
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero h1, .hero-sub, .meta-row {
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-sub { animation-delay: 0.1s; }
+  .meta-row { animation-delay: 0.2s; }
+
+  /* responsive */
+  @media (max-width: 600px) {
+    .stat-strip { grid-template-columns: 1fr; }
+    .stat-item { border-right: none; border-bottom: 1px solid var(--rule); padding: 0 0 20px; margin-bottom: 20px; }
+    .stat-item:last-child { border-bottom: none; padding-left: 0; }
+    .stat-item:nth-child(2) { padding: 0 0 20px; }
+    .phases-grid { grid-template-columns: 1fr; }
+    .header-nav { display: none; }
+    .site-footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="https://www.airesearchs.com/" class="site-logo">ai<span>researchs</span>.com</a>
+    <ul class="header-nav">
+      <li><a href="https://github.com/WOOK98/seo-optimizer">GitHub</a></li>
+      <li><a href="https://www.airesearchs.com/">网站</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="category-tag">开源 · Claude Skill · SEO</span>
+  <h1>我开源了一个<br><em>Claude SEO Skill</em></h1>
+  <p class="hero-sub">729行文档，覆盖 2026 全栈 SEO 的所有阶段——从技术架构到让 AI 搜索引擎直接引用你的内容。</p>
+  <div class="meta-row">
+    <span class="meta-item">2026年6月</span>
+    <span class="meta-dot"></span>
+    <span class="meta-item">airesearchs.com</span>
+    <span class="meta-dot"></span>
+    <span class="meta-item">8 min read</span>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stat-strip">
+  <div class="stat-item">
+    <div class="stat-number">729</div>
+    <div class="stat-label">行文档内容</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">6</div>
+    <div class="stat-label">优化阶段</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">40%+</div>
+    <div class="stat-label">AI引用率可提升幅度</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<main class="article-body">
+
+  <!-- INTRO -->
+  <div class="intro-block">
+    <p>做网站的人都绕不开一个问题：流量从哪来？</p>
+    <p>2026年这个问题变得更复杂了。搜索生态正在被AI重塑——93%的AI模式搜索会产生"零点击"，用户直接从 ChatGPT、Perplexity、Google AI Overviews 拿到答案，根本不需要点进你的网站。</p>
+    <div class="callout-text">
+      "排名第一"已经不是终点。<br>被AI引用，才是2026年真正的流量护城河。
+    </div>
+    <p>我花了一段时间研究这个问题，整理成了一套 Claude Skill，专门用来优化我的网站 <a href="https://www.airesearchs.com/" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent)">airesearchs.com</a>。现在把它开源出来，供所有人使用。</p>
+    <div class="tag-row">
+      <span class="tag tag-green">★ Star on GitHub</span>
+      <span class="tag tag-gray">github.com/WOOK98/seo-optimizer</span>
+    </div>
+  </div>
+
+  <!-- WHAT -->
+  <div class="section">
+    <div class="section-number">概览</div>
+    <h2>这个 Skill 能做什么？</h2>
+    <p>把 <code style="font-family:'DM Mono',monospace;font-size:14px;background:var(--paper-warm);padding:2px 6px;border-radius:2px">.skill</code> 文件上传到 Claude 之后，每次你问 SEO 相关问题，Claude 都会调用这套框架给出定制建议。它包含 1 个主文档 + 5 个专项参考文档，共 729 行，覆盖六个完整阶段。</p>
+
+    <div class="phases-grid">
+      <div class="phase-card">
+        <div class="phase-num">PHASE 01</div>
+        <div class="phase-title">技术底层基建</div>
+        <div class="phase-desc">GSC、GA4、Schema 部署，ISR 渲染架构，Core Web Vitals 三项硬性指标</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">PHASE 02</div>
+        <div class="phase-title">关键词矩阵与主题集群</div>
+        <div class="phase-desc">长尾词挖掘方法论，支柱页 + 集群页 + 双向内链的完整架构</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">PHASE 03</div>
+        <div class="phase-title">竞品反向工程</div>
+        <div class="phase-desc">关键词覆盖差距、反向链接截流、页面技术变迁追踪三维框架</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">PHASE 04</div>
+        <div class="phase-title">GEO 生成式引擎优化</div>
+        <div class="phase-desc">原子化答案格式，FAQ Schema，E-E-A-T 信用护城河建设</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">PHASE 05</div>
+        <div class="phase-title">数据分析与看板</div>
+        <div class="phase-desc">GA4 高阶探索，GSC × GA4 数据混合，Looker Studio 自动化看板</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">PHASE 06</div>
+        <div class="phase-title">移动端监控工作流</div>
+        <div class="phase-desc">每日10分钟巡检 + 每周30分钟复盘的标准化流程</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GEO -->
+  <div class="section">
+    <div class="section-number">最关键的部分</div>
+    <h2>为什么 GEO 比传统 SEO 更重要？</h2>
+
+    <div class="highlight-box">
+      <div class="stat-big">40%+</div>
+      <p>普林斯顿 + 佐治亚理工联合研究：系统性 GEO 策略可将网站在 AI 搜索中的<strong>引用率提升 40% 以上</strong>。而 44.2% 的 AI 高频引用数据，从文章<strong>前三分之一</strong>提取。</p>
+    </div>
+
+    <p>核心操作是<strong>原子化答案</strong>：每个知识点控制在 40-60 词，倒金字塔结构，第一句即核心结论。H2/H3 标题全改为问答格式，配合 FAQ Schema，让大模型能够精准抽取内容。</p>
+
+    <div class="code-block">
+传统标题：ISR 渲染架构解析
+↓ 改为 ↓
+GEO 标题：什么是 ISR 渲染架构，它如何影响 Core Web Vitals？
+
+传统段落：关于大语言模型的推理能力，学界存在不同观点...
+↓ 改为 ↓
+原子化答案：思维链推理是让 AI 在给出最终答案前，先逐步展示
+推理过程的技术。研究显示，CoT 提示可将 GPT-4 在数学推理任务
+上的准确率提升至 73%，相比直接提问提升约 30 个百分点。（50词）</div>
+
+    <p>这种结构不仅对 AI 搜索友好，对人类读者的阅读体验也更好——双赢。</p>
+  </div>
+
+  <!-- TECH -->
+  <div class="section">
+    <div class="section-number">技术亮点</div>
+    <h2>技术底层：不只是装几个插件</h2>
+    <p>Schema 矩阵是技术阶段的重点，包含 Article、FAQ、BreadcrumbList 全套 JSON-LD 部署。其中 FAQ Schema 是触发 Google AI Overviews 直接引用的最核心技术手段。</p>
+    <p>渲染架构推荐 ISR（增量静态再生成）——预渲染保速度，后台重建保新鲜度，是 2026 年内容站的黄金标准。</p>
+
+    <ul class="checklist">
+      <li>
+        <span class="check-icon">✓</span>
+        <span>Google Search Console + GA4 + Bing Webmaster Tools 完整部署流程（别忘了 Bing，它背后是 Copilot 的流量）</span>
+      </li>
+      <li>
+        <span class="check-icon">✓</span>
+        <span>Core Web Vitals 三项硬性指标：LCP &lt; 2.5s / INP &lt; 200ms / CLS &lt; 0.1，含具体修复方案</span>
+      </li>
+      <li>
+        <span class="check-icon">✓</span>
+        <span>JSON-LD Schema 矩阵：Article + FAQ + BreadcrumbList 完整代码，可直接复制</span>
+      </li>
+      <li>
+        <span class="check-icon">✓</span>
+        <span>URL 结构规范 + 3次点击法则，避免孤岛页面被爬虫忽略</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- DATA -->
+  <div class="section">
+    <div class="section-number">数据驱动</div>
+    <h2>淘汰虚荣指标，关注真正重要的 KPI</h2>
+    <p>PV 浏览量、总点击次数在 2026 年已被视为虚荣指标。Skill 中重新定义了核心 KPI：</p>
+
+    <div class="tag-row" style="margin-bottom:20px">
+      <span class="tag tag-red">有机转化率</span>
+      <span class="tag tag-red">参与度会话率</span>
+      <span class="tag tag-red">自然点击率</span>
+      <span class="tag tag-red">AI引用次数</span>
+    </div>
+
+    <p>Looker Studio 最强的功能是 GSC × GA4 数据混合——把曝光数据和转化数据打通，直接回答最棘手的业务问题：</p>
+    <div class="callout-text" style="font-size:18px">
+      "哪些页面获得了大量曝光和点击，但最终转化率接近零？"
+    </div>
+    <p>这些页面才是 CRO 优化的最高优先级目标，而不是那些本来就没流量的页面。</p>
+  </div>
+
+  <!-- HOW TO USE -->
+  <div class="section">
+    <div class="section-number">上手指南</div>
+    <h2>如何使用</h2>
+
+    <ol class="install-steps">
+      <li>
+        <span class="step-num">1</span>
+        <span class="step-text">前往 <a href="https://github.com/WOOK98/seo-optimizer" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent)">github.com/WOOK98/seo-optimizer</a> 下载 <strong>.skill 文件</strong>（或 Clone 整个仓库）</span>
+      </li>
+      <li>
+        <span class="step-num">2</span>
+        <span class="step-text">在 Claude 的<strong>设置 → Skills</strong> 中上传 .skill 文件，等待安装完成</span>
+      </li>
+      <li>
+        <span class="step-num">3</span>
+        <span class="step-text">开启新对话，直接问："帮我分析一下网站的SEO现状"、"给我规划这个月的内容策略"、"怎么让 ChatGPT 引用我的网站"——Claude 会自动调用这套框架</span>
+      </li>
+    </ol>
+
+    <p style="margin-top:20px;color:var(--ink-muted);font-size:15px">Skill 内置了针对 airesearchs.com 的具体竞品信息和内容集群规划，建议 Fork 后修改为你自己的网站信息。</p>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>开源、免费、即装即用</h2>
+    <p>如果对你有帮助，欢迎 Star ⭐ 有问题提 Issue，欢迎 PR。</p>
+    <div class="btn-row">
+      <a href="https://github.com/WOOK98/seo-optimizer" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub 仓库
+      </a>
+      <a href="https://www.airesearchs.com/" class="btn btn-secondary">
+        访问网站 →
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="site-footer">
+    <span class="footer-copy">© 2026 airesearchs.com</span>
+    <div class="footer-links">
+      <a href="https://github.com/WOOK98/seo-optimizer">GitHub</a>
+      <a href="https://www.airesearchs.com/">网站</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
